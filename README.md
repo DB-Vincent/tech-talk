@@ -15,7 +15,10 @@ kubectl cluster-info --context kind-kind
 
 ```bash
 # Install dependencie
-kubectl apply -f 0-dependencies.yaml
+kubectl apply -f 0-dependencies/
+
+# Enable ipvs strictARp (used for later)
+kubectl get configmap kube-proxy -n kube-system -o yaml | sed -e "s/strictARP: false/strictARP: true/" | kubectl apply -f - -n kube-system
 ```
 
 ## Actual demo
@@ -24,7 +27,7 @@ kubectl apply -f 0-dependencies.yaml
 
 ```bash
 # Apply Pod manifest
-kubectl apply -f 1-pod.yaml
+kubectl apply -f 1-pod/
 
 # Get deployed pod
 kubectl get pods --selector='app in (demo)'
@@ -36,8 +39,8 @@ kubectl port-forward pod/demo 8080:8080
 
 ```bash
 # Clean up environment & deploy ReplicaSet
-kubectl delete -f 1-pod.yaml
-kubectl apply -f 2-replicaset.yaml
+kubectl delete -f 1-pod/
+kubectl apply -f 2-replicaset/
 
 # Get deployed pods
 kubectl get pods --selector='app in (demo)'
@@ -49,8 +52,8 @@ kubectl port-forward replicaset/demo 8080:8080
 
 ```bash
 # Clean up environment & deploy HorizontalPodAutoscaler
-kubectl delete -f 2-replicaset.yaml
-kubectl apply -f 3-hpa.yaml
+kubectl delete -f 2-replicaset/
+kubectl apply -f 3-hpa/
 
 # Get deployed Pods
 kubectl get pods --selector='app in (demo)'
@@ -60,11 +63,11 @@ kubectl get hpa demo
 kubectl port-forward replicaset/demo 8080:8080
 
 # Create Pod that sends a request to the application 100 times a second
-kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://demo:8080; done"
+kubectl apply -f load-generator.yaml
 # Get deployed Pods
 kubectl get pods --selector='app in (demo)'
 # Remove load generator Pod to stop autoscaling
-kubectl delete pods load-generator
+kubectl delete -f load-generator.yaml
 # Get deployed Pods
 kubectl get pods --selector='app in (demo)'
 ```

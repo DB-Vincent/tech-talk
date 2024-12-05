@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: load-generator
+spec:
+  containers:
+    - name: load-generator
+      image: busybox:1.28
+      command:
+        - /bin/sh
+      args:
+        - -c
+        - |
+          while sleep 0.01; do wget -q -O- http://demo:8080; done
+  restartPolicy: Never
