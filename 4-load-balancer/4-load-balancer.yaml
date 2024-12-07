@@ -40,7 +40,7 @@ spec:
             - containerPort: 8080
           resources:
             requests:
-              cpu: 50m
+              cpu: 25m
               memory: 64Mi
             limits:
               cpu: 100m
@@ -81,4 +81,4 @@ spec:
     name: demo
   minReplicas: 1
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 10
+  targetCPUUtilizationPercentage: 50
