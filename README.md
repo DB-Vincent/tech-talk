@@ -44,6 +44,10 @@ kubectl apply -f 2-replicaset/
 
 # Get deployed pods
 kubectl get pods --selector='app in (demo)'
+# Scale application up
+kubectl scale --replicas=5 rs/demo
+# Get deployed pods
+kubectl get pods --selector='app in (demo)'
 # Port forward port 8080 on Pod to local machine
 kubectl port-forward svc/demo 8080:8080
 ```
