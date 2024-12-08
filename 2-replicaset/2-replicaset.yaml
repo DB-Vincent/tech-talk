@@ -5,7 +5,6 @@ metadata:
   labels:
     app: demo
 spec:
-  # modify replicas according to your case
   replicas: 3
   selector:
     matchLabels:
