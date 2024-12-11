@@ -81,6 +81,11 @@ spec:
     name: demo
   minReplicas: 1
   maxReplicas: 10
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 0 # No delay for scaling down
+    scaleUp:
+      stabilizationWindowSeconds: 0 # No delay for scaling up
   metrics:
     - type: Resource
       resource:
